@@ -26,3 +26,8 @@ Talk to 'https://t.me/BotFather' to create your own bot, copy it's token to 'BOT
 Type instagram username and password in config.py.
 
 Feel free to add more comments in config.py
+
+USAGE 
+After everything is properly configured in config.py simply run bot.py
+	cd instagram_bot/scripts/
+	python bot.py
