@@ -9,11 +9,11 @@ Everything can be controlled using your own telegram bot.
 
 
 PREREQUISITES - 
-	1. Python 3
-	2. Selenium (pip install selenium)
-	3. Google chrome
-	4. Chromedriver for your corresponding Chrome version
-	5. python-telegram-bot (pip install python-telegram-bot)
+1. Python 3
+2. Selenium (pip install selenium)
+3. Google chrome
+4. Chromedriver for your corresponding Chrome version
+5. python-telegram-bot (pip install python-telegram-bot)
 	
 Check chrome version by going to chrome://version/ on your chrome browser.
 Download chromedriver.exe for your chrome version from https://chromedriver.chromium.org/
