@@ -16,12 +16,12 @@ PREREQUISITES -
 5. python-telegram-bot (pip install python-telegram-bot)
 	
 Check chrome version by going to chrome://version/ on your chrome browser.
+
 Download chromedriver.exe for your chrome version from https://chromedriver.chromium.org/
 Copy the chromedriver.exe file to the scripts folder. (or change the path for CHROMEDRIVER_PATH in config.py)
 Talk to 'https://t.me/BotFather' to create your own bot, copy it's token to 'BOT_ID' in config.py
 Type instagram username and password in config.py.
 Feel free to add more comments in config.py
-	
 	
 USAGE 
 After everything is properly configured in config.py simply run bot.py
@@ -32,7 +32,7 @@ Now you can control your instagram activities from your mobile phone through you
 
 Commands for the telegram bot - 
 
-	1. /follow <user> <No-of-people-to-follow>
-	   eg - /follow cristiano 10 - This follows the latest 10 followers of the instagram account with username 'cristiano'
-	2. /interact <hashtag> <total_posts> <max-likes> <max-comments>
-	   eg - /interact likeforlike 10 5 3 - this command will take the latest 10 posts from #likeforlike and like 5 of them and comments on 3 of them.
+1./follow <user> <No-of-people-to-follow>
+    eg - /follow cristiano 10 - This follows the latest 10 followers of the instagram account with username 'cristiano'
+2. /interact <hashtag> <total_posts> <max-likes> <max-comments>
+    eg - /interact likeforlike 10 5 3 - this command will take the latest 10 posts from #likeforlike and like 5 of them and comments on 3 of them.
