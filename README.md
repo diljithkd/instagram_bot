@@ -33,6 +33,9 @@ Now you can control your instagram activities from your mobile phone through you
 Commands for the telegram bot - 
 
 1./follow <user> <No-of-people-to-follow>
+	
     eg - /follow cristiano 10 - This follows the latest 10 followers of the instagram account with username 'cristiano'
+
 2. /interact <hashtag> <total_posts> <max-likes> <max-comments>
+	
     eg - /interact likeforlike 10 5 3 - this command will take the latest 10 posts from #likeforlike and like 5 of them and comments on 3 of them.
