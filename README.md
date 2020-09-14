@@ -2,7 +2,9 @@
 Instagram automation with remote contol using Telegram bot
 
 Instagram bot that takes recent posts in a given hashtag, and interacts on those posts.
+
 This bot can follow a given user's followers.
+
 Everything can be controlled using your own telegram bot.
 
 
