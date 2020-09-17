@@ -46,3 +46,6 @@ Commands for the telegram bot -
 	/interact <hashtag> <total_posts> <max-likes> <max-comments>
 	
 	   	eg - /interact likeforlike 10 5 3 - this command will take the latest 10 posts from #likeforlike and like 5 of them and comments on 3 of them.
+		
+	/download <username>
+		eg - /download cristiano - This command saves all the pictures of cristiano and stores it in output folder. Also extracts metadata to mets.txt file.
