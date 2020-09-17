@@ -11,6 +11,61 @@ from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
+def fetch_images(link, driver):
+    images = []
+    driver.get(link)
+    if driver.title == 'Page Not Found • Instagram':
+        print('Username does not exist')
+        return [],''
+    name = driver.current_url.split('/')[-2]
+    newpath = '../outputs/{}'.format(name)
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while(True):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(DELAY)
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
+        for i in driver.find_elements_by_tag_name('a'):
+            if i.get_attribute('href').startswith('https://www.instagram.com/p/'):
+                images.append(i.get_attribute('href'))
+        images = list(set(images))
+    return images, newpath
+
+def process_posts(links, direc, driver):
+    all_details = []
+    temp = {}
+    for link in links:
+        details = {}
+        driver.get(link)
+        details['caption'] = driver.title
+        for i in driver.find_elements_by_tag_name('img'):
+            try:
+                if i.get_attribute('src').startswith('https://instagram') and i.get_attribute('alt').endswith("'s profile picture") == False:
+                    details['img_link'] = i.get_attribute('src')
+                    details['description'] = i.get_attribute('alt')
+                    break
+            except:
+                pass
+        if details != {}:
+            all_details.append(details)
+    temp['posts'] = all_details
+    y = json.dumps(temp, indent=4)
+    print(y, file=open(direc+'/meta.txt', 'w'))
+    return all_details
+
+def download_pics(details, folder, driver):
+    newpath = folder + '/photos'
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    for i in details:
+        if 'img_link' in i.keys():
+            filename = newpath + '/' + i['img_link'].split('?')[0].split('/')[-1]
+            urlretrieve(i['img_link'], filename)
+            
 def login(username, password, driver):
     driver.get('https://www.instagram.com/accounts/login/?hl=en')
     time.sleep(DELAY)
@@ -95,6 +150,17 @@ def interact(update, context):
     driver.close()
     driver.quit()
     
+def download(update, context):
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
+    posts, wd = fetch_images('https://www.instagram.com/{}/'.format(update.message.text.split[1]), driver)
+    if posts != []:
+        details = process_posts(posts, wd, driver)
+        download_pics(details, wd, driver)
+    driver.close()
+    driver.quit()
+  
+    
 def follow(update, context):
     options = webdriver.ChromeOptions()
     driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
@@ -115,6 +181,7 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("follow", follow))
     dp.add_handler(CommandHandler("interact", interact))
+    dp.add_handler(CommandHandler("download", download))
     updater.start_polling()
     updater.idle()
 
