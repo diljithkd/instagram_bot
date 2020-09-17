@@ -153,7 +153,7 @@ def interact(update, context):
 def download(update, context):
     options = webdriver.ChromeOptions()
     driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
-    posts, wd = fetch_images('https://www.instagram.com/{}/'.format(update.message.text.split[1]), driver)
+    posts, wd = fetch_images('https://www.instagram.com/{}/'.format(update.message.text.split(' ')[1]), driver)
     if posts != []:
         details = process_posts(posts, wd, driver)
         download_pics(details, wd, driver)
