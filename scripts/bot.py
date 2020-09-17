@@ -10,6 +10,7 @@ import random
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
+import traceback
 
 def fetch_images(link, driver):
     images = []
@@ -26,13 +27,13 @@ def fetch_images(link, driver):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(DELAY)
         new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
-            break
-        last_height = new_height
         for i in driver.find_elements_by_tag_name('a'):
             if i.get_attribute('href').startswith('https://www.instagram.com/p/'):
                 images.append(i.get_attribute('href'))
         images = list(set(images))
+        if new_height == last_height:
+            break
+        last_height = new_height
     return images, newpath
 
 def process_posts(links, direc, driver):
@@ -49,7 +50,8 @@ def process_posts(links, direc, driver):
                     details['description'] = i.get_attribute('alt')
                     break
             except:
-                pass
+                import traceback
+                print(traceback.print_exc())
         if details != {}:
             all_details.append(details)
     temp['posts'] = all_details
@@ -63,8 +65,11 @@ def download_pics(details, folder, driver):
         os.makedirs(newpath)
     for i in details:
         if 'img_link' in i.keys():
-            filename = newpath + '/' + i['img_link'].split('?')[0].split('/')[-1]
-            urlretrieve(i['img_link'], filename)
+            try:
+                filename = newpath + '/' + i['img_link'].split('?')[0].split('/')[-1]
+                urlretrieve(i['img_link'], filename)
+            except:
+                pass
             
 def login(username, password, driver):
     driver.get('https://www.instagram.com/accounts/login/?hl=en')
@@ -87,9 +92,10 @@ def get_posts_hashtag(tag, num, driver):
     driver.get('https://www.instagram.com/explore/tags/{}/'.format(tag))
     while(len(posts) <= num+9):
         for i in driver.find_elements_by_tag_name('a'):
-            if i.get_attribute('href').startswith('https://www.instagram.com/p'):
-                posts.append(i.get_attribute('href'))
-                posts = list(set(posts))
+            if i.get_attribute('href') != None:
+                if i.get_attribute('href').startswith('https://www.instagram.com/p'):
+                    posts.append(i.get_attribute('href'))
+                    posts = list(set(posts))
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     return posts[9: num+9]
 
@@ -153,10 +159,13 @@ def interact(update, context):
 def download(update, context):
     options = webdriver.ChromeOptions()
     driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
-    posts, wd = fetch_images('https://www.instagram.com/{}/'.format(update.message.text.split(' ')[1]), driver)
-    if posts != []:
-        details = process_posts(posts, wd, driver)
-        download_pics(details, wd, driver)
+    try:
+        posts, wd = fetch_images('https://www.instagram.com/{}/'.format(update.message.text.split(' ')[1]), driver)
+        if posts != []:
+            details = process_posts(posts, wd, driver)
+            download_pics(details, wd, driver)
+    except:
+        print(traceback.print_exc())
     driver.close()
     driver.quit()
   
