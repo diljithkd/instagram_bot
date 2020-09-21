@@ -5,6 +5,8 @@ Instagram bot that takes recent posts in a given hashtag, and interacts on those
 
 This bot can follow a given user's followers.
 
+Scrape details off an instagram page.
+
 Everything can be controlled using your own telegram bot.
 
 
